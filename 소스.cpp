@@ -50,11 +50,9 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
                 changeObjectx(imagex[i][j], imagey[i][j]);
                 changeObjecty(imagex[i][j], imagey[i][j]);
                 x1 = i; y1 = j;
-                image1[2][2] = blank;
-                locateObject(image1[x1][y1], scene2, imagex[x1][y1], imagey[x1][y1]);
-                locateObject(image1[2][2], scene2, imagex[2][2], imagey[2][2]);
             }
-
+            locateObject(image1[x1][y1], scene2, imagex[x1][y1], imagey[x1][y1]);
+            locateObject(image1[2][2], scene2, imagex[2][2], imagey[2][2]);
         }
     }
 
