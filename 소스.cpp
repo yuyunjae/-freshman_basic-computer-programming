@@ -31,29 +31,35 @@ void ending() {
 }
 
 
-void changeObject(int x, int y) {
+void changeObjectx(int x, int y) {
     int xx = x;
     x = imagex[2][2];
     imagex[2][2] = xx;
+}
+
+void changeObjecty(int x, int y){
     int yy = y;
     y = imagey[2][2];
     imagey[2][2] = yy;
-
-
 }
 
 void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
             if ((object == image1[i][j]) && ((j < 2) && ((image1[i][j + 1] == image1[2][2])) || ((j > 0) && (image1[i][j - 1] == image1[2][2])) || ((i < 2) && (image1[i + 1][j] == image1[2][2])) || ((i > 0) && (image1[i - 1][j] == image1[2][2])))) {
-                changeObject(imagex[i][j], imagey[i][j]);
+                changeObjectx(imagex[i][j], imagey[i][j]);
+                changeObjecty(imagex[i][j], imagey[i][j]);
                 x1 = i; y1 = j;
+                image1[2][2] = blank;
+                locateObject(image1[x1][y1], scene2, imagex[x1][y1], imagey[x1][y1]);
+                locateObject(image1[2][2], scene2, imagex[2][2], imagey[2][2]);
             }
 
         }
     }
-    locateObject(image1[x1][y1], scene2, imagex[x1][y1], imagey[x1][y1]);
-    locateObject(image1[2][2], scene2, imagex[2][2], imagey[2][2]);
+
+
+
     if (object == endButton) {
         endGame();
     }
@@ -67,7 +73,6 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
 }
 
 int main() {
-    setMouseCallback(mouseCallback);
     scene1 = createScene("퍼즐 판1", "image1.png");
     scene2 = createScene("퍼즐 판2", "image1.png");
     startButton = createObject("시작 버튼", "start.png", scene1, 590, 70, true);
@@ -82,6 +87,7 @@ int main() {
     image1[2][1] = createObject("이미지8", "image1_08.png", scene2, imagex[2][1], imagey[2][1], true);
     image1[2][2] = createObject("이미지9", "흰색_1.png", scene2, imagex[2][2], imagey[2][2], true);
     scaleObject(image1[2][2], 0.492f);
+    setMouseCallback(mouseCallback);
 
     startGame(scene1);
 }
