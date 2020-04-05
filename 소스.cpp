@@ -46,7 +46,7 @@ void changeObjecty(int x, int y){
 void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
     for (int i = 0; i < 3; i++) {
         for (int j = 0; j < 3; j++) {
-            if ((object == image1[i][j]) && ((j < 2) && ((image1[i][j + 1] == image1[2][2])) || ((j > 0) && (image1[i][j - 1] == image1[2][2])) || ((i < 2) && (image1[i + 1][j] == image1[2][2])) || ((i > 0) && (image1[i - 1][j] == image1[2][2])))) {
+            if ((object == image1[i][j]) && (((j < 2) && (image1[i][j + 1] == image1[2][2])) || ((j > 0) && (image1[i][j - 1] == image1[2][2])) || ((i < 2) && (image1[i + 1][j] == image1[2][2])) || ((i > 0) && (image1[i - 1][j] == image1[2][2])))) {
                 changeObjectx(imagex[i][j], imagey[i][j]);
                 changeObjecty(imagex[i][j], imagey[i][j]);
                 x1 = i; y1 = j;
