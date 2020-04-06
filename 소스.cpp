@@ -1,13 +1,14 @@
 #include<Bangtal.h>
 #include<time.h>
 #include<stdio.h>
+#include<stdlib.h>
 #pragma comment(lib,"Bangtal.lib")
 
 SceneID scene1, scene2;
-ObjectID image1[3][3];
 ObjectID startButton, endButton;
 clock_t start, end;
-ObjectID blank;
+ObjectID image01, image02, image03, image04, image05, image06, image07, image08, image09, blank;
+ObjectID image1[3][3] = { {image01, image02, image03},{image04, image05, image06},{image07,image08,blank} };
 int imagex[3][3] = { { 400, 600, 800 },{ 400, 600, 800 },{ 400, 600, 800 } };
 int imagey[3][3] = { { 520, 520, 520 }, { 320, 320, 320 }, { 120, 120, 120 } };
 bool checked[3][3];
@@ -30,34 +31,39 @@ void ending() {
     showObject(endButton);
 }
 
-
-void changeObjectx(int x, int y) {
-    int xx = x;
-    x = imagex[2][2];
-    imagex[2][2] = xx;
+void Swap(ObjectID a, ObjectID b)
+{
+    ObjectID r = a;
+    a = b;
+    b = r;
 }
 
-void changeObjecty(int x, int y){
-    int yy = y;
-    y = imagey[2][2];
-    imagey[2][2] = yy;
+void SwapX(int x1, int x2) {
+    int q = x1;
+    x1 = x2;
+    x2 = q;
+}
+
+void SwapY(int y1, int y2) {
+    int p = y1;
+    y1 = y2;
+    y2 = p;
+}
+
+void random()
+{
+    int num[3][3];
+    srand(time(NULL));
+
+    for (int i = 0; i < 9; i++) {
+        for (int j = 0; j < 3; j++) {
+            num[i][j] = (rand() % 9) + 1;
+            //사용법을 모르겠음,
+        }
+    }
 }
 
 void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            if ((object == image1[i][j]) && (((j < 2) && (image1[i][j + 1] == image1[2][2])) || ((j > 0) && (image1[i][j - 1] == image1[2][2])) || ((i < 2) && (image1[i + 1][j] == image1[2][2])) || ((i > 0) && (image1[i - 1][j] == image1[2][2])))) {
-                changeObjectx(imagex[i][j], imagey[i][j]);
-                changeObjecty(imagex[i][j], imagey[i][j]);
-                x1 = i; y1 = j;
-            }
-            locateObject(image1[x1][y1], scene2, imagex[x1][y1], imagey[x1][y1]);
-            locateObject(image1[2][2], scene2, imagex[2][2], imagey[2][2]);
-        }
-    }
-
-
-
     if (object == endButton) {
         endGame();
     }
@@ -67,8 +73,58 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
         enterScene(scene2);
         blank = image1[2][2];
         start = clock();
+        // random();
     }
+
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            if ((object == image1[i][j]) && (object != blank)) {
+                if ((i < 2) && (image1[i + 1][j] == blank)) {
+                    Swap(image1[i][j], imagex[i + 1][j]);
+                    SwapX(imagex[i][j], imagex[i + 1][j]);
+                    SwapY(imagey[i][j], imagey[i + 1][j]);
+                    locateObject(image1[i][j], scene2, imagex[i + 1][j], imagey[i + 1][j]);
+                    locateObject(image1[i + 1][j], scene2, imagex[i][j], imagey[i][j]);
+                    blank = image1[i][j];
+                }
+
+                else if ((i > 0) && (image1[i - 1][j] == blank)) {
+                    Swap(image1[i][j], imagey[i - 1][j]);
+                    SwapX(imagex[i][j], imagex[i - 1][j]);
+                    SwapY(imagey[i][j], imagey[i - 1][j]);
+                    locateObject(image1[i][j], scene2, imagex[i - 1][j], imagey[i - 1][j]);
+                    locateObject(image1[i - 1][j], scene2, imagex[i][j], imagey[i][j]);
+                    blank = image1[i][j];
+                }
+
+                else if ((j < 2) && (image1[i][j + 1] == blank)){
+                    Swap(image1[i][j], image1[i][j + 1]);
+                    SwapX(imagex[i][j], imagex[i][j + 1]);
+                    SwapY(imagey[i][j], imagey[i][j + 1]);
+                    locateObject(image1[i][j], scene2, imagex[i][j + 1], imagey[i][j + 1]);
+                    locateObject(image1[i][j + 1], scene2, imagex[i][j], imagey[i][j]);
+                    blank = image1[i][j];
+
+                }
+
+                else if ((j > 0) && (image1[i][j - 1] == blank)) {
+                    Swap(image1[i][j], imagex[i][j - 1]);
+                    SwapX(imagex[i][j], imagex[i][j - 1]);
+                    SwapY(imagey[i][j], imagey[i][j - 1]);
+                    locateObject(image1[i][j], scene2, imagex[i][j - 1], imagey[i][j - 1]);
+                    locateObject(image1[i][j - 1], scene2, imagex[i][j], imagey[i][j]);
+                    blank = image1[i][j];
+                }
+
+            }
+
+        }
+
+    }
+
 }
+
+
 
 int main() {
     scene1 = createScene("퍼즐 판1", "image1.png");
