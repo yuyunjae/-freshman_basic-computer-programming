@@ -9,7 +9,7 @@ SceneID scene1, scene2;
 
 ObjectID startButton, endButton, explainButton, explain;
 ObjectID moleObjects[8], animalObjects[8], gameObjects[16];
-int score, click, mode = 0;
+int click, mode = 0;
 bool flag = false;
 TimerID timer1, timer2, timer3;
 
@@ -58,7 +58,6 @@ void startGame()
 void end_Game()
 {
     showMessage("게임 종료~!\n 총 생존시간은 위의 타이머와 같습니다.");
-	//+ showMessage("점수는 %d입니다", score); 라고 하고 싶다..
 	flag = false;
 	setObjectImage(startButton, "images/restart.png");
 	locateObject(startButton, scene2, 590, 70);
