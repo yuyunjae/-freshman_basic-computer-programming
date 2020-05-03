@@ -43,6 +43,7 @@ void startGame()
 	for (int i = 0; i < 16; i++) {
 		hideObject(gameObjects[i]);
 	}
+
 	timer1 = createTimer(20.f);
 	timer2 = createTimer(0.1f);
 	timer3 = createTimer(1000.0f);
@@ -50,7 +51,6 @@ void startGame()
 	startTimer(timer1);
 	startTimer(timer2);
 	startTimer(timer3);
-
 	flag = true;
 }
 
