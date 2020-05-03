@@ -58,7 +58,7 @@ void startGame()
 void end_Game()
 {
     showMessage("게임 종료~!\n 총 생존시간은 위의 타이머와 같습니다.");
-	//+ showMessage("점수는 %d입니다", score); 라고 하고 싶다..
+	//showMessage("점수는 %d입니다", score); 라고 하고 싶다..
 	flag = false;
 	setObjectImage(startButton, "images/restart.png");
 	locateObject(startButton, scene2, 590, 70);
