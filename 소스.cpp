@@ -8,11 +8,11 @@
 SceneID scene1, scene2;
 
 ObjectID startButton, endButton, explainButton, explain;
-ObjectID moleObjects[10],gameObjects[20];
-int score, num;
+ObjectID moleObjects[8], animalObjects[8], gameObjects[16];
+int score, num, click;
 bool flag = false;
 
-TimerID timer1, timer2;
+TimerID timer1, timer2, timer3;
 
 
 void startGame()
@@ -21,70 +21,95 @@ void startGame()
 	hideObject(startButton);
 	hideObject(endButton);
 	hideObject(explainButton);
-	char image[100];
+	for (int i = 0; i < 16; i++) {
+		hideObject(gameObjects[i]);
+	}
+	char image1[100];
+	char image2[100];
 	for (int i = 0; i < 8; i++) {
-		sprintf(image, "두더지-%d.png", i + 1);
-		moleObjects[i] = createObject(image);
-		gameObjects[i] = moleObjects[i]; //gameObjects[7}까지 사용함.
-		locateObject(moleObjects[i], scene2, 100 + 100*i, 100);
-		showObject(moleObjects[i]);
+		sprintf(image1, "images/두더지-%d.png", i + 1);
+		moleObjects[i] = createObject(image1);
+		gameObjects[i] = moleObjects[i]; //gameObjects[7}까지 사용함.(8개)
+		locateObject(gameObjects[i], scene2, 100 + 100 * i, 100);
+		showObject(gameObjects[i]);
+	}
+	for (int i = 8; i < 16; i++) {
+		sprintf(image2, "images/동물-%d.png", i - 7);
+		animalObjects[i-8] = createObject(image2);
+		gameObjects[i] = animalObjects[i-8]; //gameObjects[8] ~ gameObjects[15]까지 사용함.(8개)
+		locateObject(gameObjects[i], scene2, 100 + 100 * (i - 8), 300);
+		showObject(gameObjects[i]);
 	}
 
 	timer1 = createTimer(20.f);
+	timer2 = createTimer(0.1f);
+	timer3 = createTimer(1000.0f);
 	showTimer(timer1);
 	startTimer(timer1);
-	timer2 = createTimer(0.2f);
 	startTimer(timer2);
+	startTimer(timer3);
+
+	flag = true;
 }
 
 
 void endGame(bool success)
 {
-	if (success) {
-		showMessage("굿");
+	if (success == true) {
+		//절대 나올리 없음
 	}
 	else {
 		showMessage("게임 종료~!");
+		//showMessage("점수는 %d입니다", score); 라고 하고 싶다..
+		flag = false;
 	}
 
-	setObjectImage(startButton, "restart.png");
+	setObjectImage(startButton, "images/restart.png");
 	locateObject(startButton, scene2, 590, 70);
 	locateObject(endButton, scene2, 590, 20);
 	locateObject(explainButton, scene2, 550, 120);
 	showObject(startButton);
 	showObject(endButton);
 	showObject(explainButton);
-
-
 	stopTimer(timer1);
+	stopTimer(timer2);
+	stopTimer(timer3);
 }
 
 void random_move() {
-	int m, n, o, p;
-	m = rand() % 8;
-	for (int i = 0; i < 8; i++) {
-		if (m == i) {
+	int m, n, o;
+	//flag = false;
+	m = rand() % 16;
+	for (int i = 0; i < 16; i++) {
+		if (m == i && flag == true) {
 			n = rand() % 1180;
 			o = rand() % 620;
-			locateObject(moleObjects[i], scene2, n, o);
-			showObject(moleObjects[i]);
+			locateObject(gameObjects[i], scene2, n, o);
+			showObject(gameObjects[i]);
 		}
 	}
-	
 }
 
 int game_index(ObjectID a) {
 	for (int i = 0; i < 16; i++) {
 		if (gameObjects[i] == a) return i;
 	}
-
 	return -1;
 }
 
 
 void mouseCallback(ObjectID object, int x, int y, MouseAction action)
 {
-	if (object == endButton) {
+	if (flag == true) {
+		click = game_index(object);
+		if (click < 8 && click >= 0) {
+			increaseTimer(timer1, 0.5f);
+		}
+		else if (click >= 8) {
+			decreaseTimer(timer1, 0.5f);
+		}
+	}
+	else if (object == endButton) {
 		endGame();
 	}
 	else if (object == startButton) {
@@ -93,9 +118,7 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action)
 	else if (object == explainButton) {
 		showObject(explain);
 	}
-//	else if () {
 
-//	}
 }
 
 
@@ -107,8 +130,8 @@ void timerCallback(TimerID timer)
 	}
 	else if (timer == timer2) {
 		random_move();
-		timer2 = createTimer(0.2f);
-		startTimer(timer2);	
+		timer2 = createTimer(0.1f);
+		startTimer(timer2);
 	}
 }
 
@@ -131,14 +154,11 @@ int main()
 	setMouseCallback(mouseCallback);
 	setTimerCallback(timerCallback);
 
-	scene1 = createScene("두더지 잡기", "배경-start.png");
-	scene2 = createScene("두더지 잡기~", "땅.jpg");
-	startButton = createObject("start.png", scene1, 590, 70, true);
-	endButton = createObject("end.png", scene1, 590, 20, true);
-	explainButton = createObject("설명버튼.png", scene1, 550, 120, true);
+	scene1 = createScene("두더지 잡기", "images/배경-start.png");
+	scene2 = createScene("두더지 잡기~", "images/땅.jpg");
+	startButton = createObject("images/start.png", scene1, 590, 70, true);
+	endButton = createObject("images/end.png", scene1, 590, 20, true);
+	explainButton = createObject("images/설명버튼.png", scene1, 550, 120, true);
 	srand((unsigned int)time(NULL));
-	//santa = createObject("Images/santa.png", scene1, santaX, santaY, true);
-	//playButton = createObject("Images/play.png", scene1, 610, 30, false);
-	//showMessage("점수는 %d입니다", score);
 	startGame(scene1);
 }
