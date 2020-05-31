@@ -45,7 +45,7 @@ int game_check2(int k)//to 물체 1칸 위 위치
 		}
 		i++;
 	}
-	return (i-1);
+	return (i - 1);
 }
 
 void move_tower(int n, int from, int to, int temp) { // n개의 원판을 from에서 to로 temp를 이용해서 옮긴다. 최초 from->a, to->b, temp->c
@@ -58,7 +58,6 @@ void move_tower(int n, int from, int to, int temp) { // n개의 원판을 from에서 to
 					int k = stack[game_check2(0) + 1][0];
 					stack[game_check2(0) + 1][0] = stack[game_check2(1)][1];
 					stack[game_check2(1)][1] = k;
-					n = 0;
 					break;
 				}
 				else if (to == c) {
@@ -67,41 +66,115 @@ void move_tower(int n, int from, int to, int temp) { // n개의 원판을 from에서 to
 					int k = stack[game_check2(0) + 1][0];
 					stack[game_check2(0) + 1][0] = stack[game_check2(2)][2];
 					stack[game_check2(2)][2] = k;
-
-					n = 0;
-					//flag = false;
 					break;
 				}
 			}
 			else if (from == b) {
 				if (to == a) {
+					locateObject(Objects[game_check1(1)], scene1, linex[game_check1(1)] - 400, liney[game_check2(0)]);
 
+					int k = stack[game_check2(1) + 1][1];
+					stack[game_check2(1) + 1][1] = stack[game_check2(0)][0];
+					stack[game_check2(0)][0] = k;
+					break;
 				}
 				else if (to == c) {
+					locateObject(Objects[game_check1(1)], scene1, linex[game_check1(1)] + 400, liney[game_check2(2)]);
 
+					int k = stack[game_check2(1) + 1][1];
+					stack[game_check2(1) + 1][1] = stack[game_check2(2)][2];
+					stack[game_check2(2)][2] = k;
+					break;
 				}
 			}
 			else if (from == c) {
 				if (to == a) {
+					locateObject(Objects[game_check1(2)], scene1, linex[game_check1(2)] - 800, liney[game_check2(0)]);
 
+					int k = stack[game_check2(2) + 1][2];
+					stack[game_check2(2) + 1][2] = stack[game_check2(0)][0];
+					stack[game_check2(0)][0] = k;
+					break;
 				}
 				else if (to == b) {
+					locateObject(Objects[game_check1(2)], scene1, linex[game_check1(2)] - 400, liney[game_check2(1)]);
 
+					int k = stack[game_check2(2) + 1][2];
+					stack[game_check2(2) + 1][2] = stack[game_check2(1)][1];
+					stack[game_check2(1)][1] = k;
+					break;
 				}
 			}
 		}
 	}
 	else {
 		move_tower(n - 1, from, temp, to);
-		//-> 추가 해야함 from에서 to로 한개를 옮긴다.
-			move_tower(n - 1, temp, to, from);
+		while (1) {
+			if (from == a) {
+				if (to == b) {
+					locateObject(Objects[game_check1(0)], scene1, linex[game_check1(0)] + 400, liney[game_check2(1)]);
+
+					int k = stack[game_check2(0) + 1][0];
+					stack[game_check2(0) + 1][0] = stack[game_check2(1)][1];
+					stack[game_check2(1)][1] = k;
+					break;
+				}
+				else if (to == c) {
+					locateObject(Objects[game_check1(0)], scene1, linex[game_check1(0)] + 800, liney[game_check2(2)]);
+
+					int k = stack[game_check2(0) + 1][0];
+					stack[game_check2(0) + 1][0] = stack[game_check2(2)][2];
+					stack[game_check2(2)][2] = k;
+					break;
+				}
+			}
+			else if (from == b) {
+				if (to == a) {
+					locateObject(Objects[game_check1(1)], scene1, linex[game_check1(1)] - 400, liney[game_check2(0)]);
+
+					int k = stack[game_check2(1) + 1][1];
+					stack[game_check2(1) + 1][1] = stack[game_check2(0)][0];
+					stack[game_check2(0)][0] = k;
+					break;
+				}
+				else if (to == c) {
+					locateObject(Objects[game_check1(1)], scene1, linex[game_check1(1)] + 400, liney[game_check2(2)]);
+
+					int k = stack[game_check2(1) + 1][1];
+					stack[game_check2(1) + 1][1] = stack[game_check2(2)][2];
+					stack[game_check2(2)][2] = k;
+					break;
+				}
+			}
+			else if (from == c) {
+				if (to == a) {
+					locateObject(Objects[game_check1(2)], scene1, linex[game_check1(2)] - 800, liney[game_check2(0)]);
+
+					int k = stack[game_check2(2) + 1][2];
+					stack[game_check2(2) + 1][2] = stack[game_check2(0)][0];
+					stack[game_check2(0)][0] = k;
+					break;
+				}
+				else if (to == b) {
+					locateObject(Objects[game_check1(2)], scene1, linex[game_check1(2)] - 400, liney[game_check2(1)]);
+
+					int k = stack[game_check2(2) + 1][2];
+					stack[game_check2(2) + 1][2] = stack[game_check2(1)][1];
+					stack[game_check2(1)][1] = k;
+					break;
+				}
+			}
+		}
+		move_tower(n - 1, temp, to, from);
 	}
+
 }
+
 
 void playGame() {
 	hideObject(startButton);
 	//flag = true;
-	timer1 = createTimer(0.5f);
+	timer1 = createTimer(0.2f);
 	startTimer(timer1);
 }
 
@@ -114,8 +187,8 @@ void mouseCallback(ObjectID object, int x, int y, MouseAction action) {
 void timerCallback(TimerID timer) {
 	if (timer == timer1) {
 		//flag = true;
-		move_tower(2, a, b, c);
-		timer1 = createTimer(0.5f);
+		move_tower(1, a, b, c);
+		timer1 = createTimer(0.2f);
 		startTimer(timer1);
 	}
 }
