@@ -1,1 +1,1 @@
-# -freshman_basic-computer-programming
+#대학교 1학년 1학기때 기초컴퓨터프로그래밍 이라는 수업을 들으면서 정리해놓은 과제들의 일부입니다..
